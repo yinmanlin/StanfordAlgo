@@ -40,4 +40,11 @@ if __name__ == '__main__':
 
 
 '''
-print(MergeSortCountInversion([4,3,2,1,0]))
+
+with open('intArray.txt') as f:
+    content = f.readlines()
+# you may also want to remove whitespace characters like `\n` at the end of each line
+content = [int(x.strip()) for x in content] 
+print(len(content))
+_, inversionCount = MergeSortCountInversion(content)
+print(inversionCount)
