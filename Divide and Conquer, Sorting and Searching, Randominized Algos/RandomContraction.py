@@ -1,4 +1,6 @@
 import random
+
+
 def Contraction(vertices):
     # read in data as list of list
     # first randomly pick a row
@@ -9,19 +11,24 @@ def Contraction(vertices):
 
     while (len(vertices)) > 2:
         # keep vertex, remove edge
-        vertex = random.randint(1, len(vertices) + 1)
-        edge = random.randint(1, len(vertices[vertex]) + 1)
-        vertexToKeep = vertices[vertex][0]
-        vertexToRemove = vertices[edge][0]
+        vertexToKeepLocation = random.randint(0, len(vertices) - 1)
+        vertexToRemoveLocation = random.randint(1, len(vertices[vertexToKeepLocation]) - 1) 
+        vertexToKeep = vertices[vertexToKeepLocation][0]
+        vertexToRemove = vertices[vertexToKeepLocation][vertexToRemoveLocation]
 
+        # find the vertex to remove vector
+        for i in range(len(vertices)):
+            if vertexToRemove == vertices[i][0]:
+                removeLocation = i
+                break
+        
+        del vertices[removeLocation][0]
+        vertices[removeLocation] = list(filter((vertexToKeep).__ne__, vertices[removeLocation]))
+        vertices[vertexToKeepLocation] = list(filter((vertexToRemove).__ne__, vertices[vertexToKeepLocation]))
 
-        # note here remove will only remove the first occurence, but we want to remove all occurences
-        vertices[edge] = list(filter((vertexToKeep).__ne__, vertices[edge]))
-        # merge two lists, might create duplicates but that's fine
-        vertices[vertex] = vertices[vertex] + vertices[edge]
-        vertices[vertex] = list(filter((vertexToRemove).__ne__, vertices[vertex]))
+        vertices[vertexToKeepLocation] = vertices[vertexToKeepLocation] + vertices[removeLocation]
 
-        del vertices[edge]
+        del vertices[removeLocation]
 
         # clean other involved vertices
         # might create dups as well
@@ -30,5 +37,18 @@ def Contraction(vertices):
                 vertices[i] = [vertexToKeep if x == vertexToRemove else x for x in vertices[i]]
     
     # after only two vertices left
-        
+    return len(vertices[0]) - 1
 
+with open('kargerMinCut.txt') as f:
+    content = f.readlines()
+# you may also want to remove whitespace characters like `\n` at the end of each line
+content = [x.strip() for x in content] 
+content = [x.split('\t') for x in content] 
+content = [[int(j) for j in i] for i in content]
+#print(content)
+
+minCutCount=[]
+for i in range(10000):
+    minCutCount.append(Contraction(content))
+
+print(min(minCutCount))
