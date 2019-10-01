@@ -31,12 +31,12 @@ def QuickSortCountComparisons(numList, totalComparison, start, end):
     
     a = numList[start]
     b = numList[end]
-    c = numList[(int)(end/2)]
+    c = numList[(int)((start+end)/2)]
 
     if (a >= b and b >= c) or (c >= b and b >= a):
         pivotPosition = end
     elif (b >= c and c >= a) or (a >= c and c >= b):
-        pivotPosition = (int)(end/2)
+        pivotPosition = (int)((start+end)/2)
     elif (b >= a and a >= c) or (c >= a and a >= b):
         pivotPosition = start
    
